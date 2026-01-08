@@ -1,7 +1,7 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseForbidden
-from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.hashers import make_password
 from .models import Client, UserConsent, Scope, RefreshToken, RSAKey
 from .utils import validate_pkce, generate_jwt
@@ -537,3 +537,11 @@ class ProtectedTestView(APIView):
 
 
 
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        redirect_uri = request.GET.get('post_logout_redirect_uri')
+        if redirect_uri:
+            return redirect(redirect_uri)
+        return HttpResponse("Logged out successfully.")
