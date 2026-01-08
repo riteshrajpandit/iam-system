@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consent Required - IOXET IAM</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; }
+        .consent-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { margin-top: 0; }
+        .scope-list { list-style: none; padding: 0; margin: 1.5rem 0; }
+        .scope-list li { border-bottom: 1px solid #eee; padding: 0.5rem 0; font-weight: bold; color: #333; }
+        .scope-desc { font-weight: normal; font-size: 0.9em; color: #666; display: block; }
+        .actions { display: flex; gap: 1rem; }
+        button { flex: 1; padding: 0.75rem; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+        button.allow { background-color: #28a745; color: white; }
+        button.allow:hover { background-color: #218838; }
+        button.deny { background-color: #dc3545; color: white; }
+        button.deny:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+    <div class="consent-container">
+        <h2>{{ client.name }}</h2>
+        <p>This application wants to access your account:</p>
+        
+        <ul class="scope-list">
+            {% for scope in scopes %}
+                <li>
+                    {{ scope.name }}
+                    <span class="scope-desc">{{ scope.description }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="client_id" value="{{ client_id }}">
+            <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}">
+            <input type="hidden" name="response_type" value="{{ response_type }}">
+            <input type="hidden" name="code_challenge" value="{{ code_challenge }}">
+            <input type="hidden" name="code_challenge_method" value="{{ code_challenge_method }}">
+            
+            <div class="actions">
+                <button type="submit" name="deny" value="true" class="deny">Deny</button>
+                <button type="submit" name="allow" value="true" class="allow">Allow</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

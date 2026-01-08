@@ -1,0 +1,21 @@
+Starting End-to-End Load Test with 50 users...
+Target: http://localhost:8000
+Client ID: 00000000-0000-0000-0000-000000000001
+
+--- Running Single User Debug Trace ---
+[DEBUG] User 0 starting flow. Email: load_user_0_1767799650@example.com
+[DEBUG] 1. Registering at http://localhost:8000/api/v1/auth/register/
+[DEBUG]    -> Registered.
+[DEBUG] 2. Initial Auth Request to http://localhost:8000/o/authorize/
+[DEBUG]    -> Got CSRF Token.
+[DEBUG] 3. Logging in at http://localhost:8000/o/authorize/?response_type=code&client_id=00000000-0000-0000-0000-000000000001&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fcallback&scope=openid+email+profile&code_challenge=VOM_EaXvCaU3B9j7lOVUSxD0hnwCV0ZHNnCFre3ztes&code_challenge_method=S256
+[DEBUG]    -> Login POST successful (or redirect followed).
+[DEBUG] 4. Consent Page Detected. Approving...
+[DEBUG]    -> Consent Approved.
+[DEBUG] 5. Final URL after redirects: http://localhost:8000/callback?code=uxYAHstntTwY1hQLE0gCt3nq2D4tAZmB
+[DEBUG]    -> Captured Auth Code: uxYAHs...
+[DEBUG] 6. Exchanging token at http://localhost:8000/o/token/
+[DEBUG]    -> Got Access Token.
+[DEBUG] 7. Fetching UserInfo at http://localhost:8000/o/userinfo/
+DEBUG RUN FAILED: UserInfo Failed: 500
+Aborting full load test due to debug failure.

@@ -1,0 +1,293 @@
+{
+    "info": {
+        "name": "IOXET IAM API",
+        "description": "Auto-generated collection for OIDC Identity Provider",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000",
+            "type": "string"
+        },
+        {
+            "key": "client_id",
+            "value": "61b2a22c-5dbb-4938-8bcc-990dab0196f5",
+            "type": "string"
+        },
+        {
+            "key": "client_secret",
+            "value": "PLACEHOLDER_SECRET",
+            "type": "string"
+        },
+        {
+            "key": "access_token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "code_verifier",
+            "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Register User",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"email\": \"newuser@example.com\",\n    \"password\": \"strongpassword123\",\n    \"first_name\": \"Test\",\n    \"last_name\": \"User\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/v1/auth/register/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "v1",
+                        "auth",
+                        "register",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Authorize (Browser Step)",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/o/authorize/?response_type=code&client_id={{client_id}}&redirect_uri=http://localhost:8000/callback&scope=openid email profile&code_challenge=E9Melhoa2O9udQQXRFRZFIOT1o1bTS1qlt-icwYivUI&code_challenge_method=S256",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "o",
+                        "authorize",
+                        ""
+                    ],
+                    "query": [
+                        {
+                            "key": "response_type",
+                            "value": "code"
+                        },
+                        {
+                            "key": "client_id",
+                            "value": "{{client_id}}"
+                        },
+                        {
+                            "key": "redirect_uri",
+                            "value": "http://localhost:8000/callback"
+                        },
+                        {
+                            "key": "scope",
+                            "value": "openid email profile"
+                        },
+                        {
+                            "key": "code_challenge",
+                            "value": "E9Melhoa2O9udQQXRFRZFIOT1o1bTS1qlt-icwYivUI",
+                            "description": "S256 of 'a'*43"
+                        },
+                        {
+                            "key": "code_challenge_method",
+                            "value": "S256"
+                        }
+                    ]
+                },
+                "description": "Copy this URL to a browser to log in and get the 'code'."
+            }
+        },
+        {
+            "name": "Token Exchange",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "grant_type",
+                            "value": "authorization_code",
+                            "type": "text"
+                        },
+                        {
+                            "key": "code",
+                            "value": "PASTE_CODE_HERE",
+                            "type": "text"
+                        },
+                        {
+                            "key": "client_id",
+                            "value": "{{client_id}}",
+                            "type": "text"
+                        },
+                        {
+                            "key": "client_secret",
+                            "value": "{{client_secret}}",
+                            "type": "text"
+                        },
+                        {
+                            "key": "redirect_uri",
+                            "value": "http://localhost:8000/callback",
+                            "type": "text"
+                        },
+                        {
+                            "key": "code_verifier",
+                            "value": "{{code_verifier}}",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "{{base_url}}/o/token/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "o",
+                        "token",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "UserInfo",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/o/userinfo/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "o",
+                        "userinfo",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Introspect Token",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                    }
+                ],
+                "auth": {
+                    "type": "basic",
+                    "basic": [
+                        {
+                            "key": "password",
+                            "value": "{{client_secret}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "username",
+                            "value": "{{client_id}}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "token",
+                            "value": "{{access_token}}",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "{{base_url}}/o/introspect/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "o",
+                        "introspect",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Revoke Token",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                    }
+                ],
+                "auth": {
+                    "type": "basic",
+                    "basic": [
+                        {
+                            "key": "password",
+                            "value": "{{client_secret}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "username",
+                            "value": "{{client_id}}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "token",
+                            "value": "REFRESH_TOKEN_HERE",
+                            "type": "text"
+                        },
+                        {
+                            "key": "token_type_hint",
+                            "value": "refresh_token",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "{{base_url}}/o/revoke/",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "o",
+                        "revoke",
+                        ""
+                    ]
+                }
+            }
+        }
+    ]
+}
